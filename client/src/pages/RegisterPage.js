@@ -1,33 +1,35 @@
-import React, {useState} from 'react'
-import { Link, Redirect } from "react-router-dom";
-import { useSelector ,useDispatch} from "react-redux";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Container } from "react-bootstrap";
+import { authActions } from "../redux/actions";
 
-import { authActions } from '../redux/actions';
-function AuthPage() {
-
-  const [email, setEmail] = useState('');
-  const [ password, setPassword ] = useState('');
+function RegisterPage() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
   const { user } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const onRegister = (e) => {
     e.preventDefault();
-    
-    dispatch(authActions.login( email, password))
-    
-  }
-     
-   if (user.loading) return <h1>Registering.....</h1>;
-   if (user.redirectToHomePage) return <Redirect to="/" />;
+    dispatch(authActions.register(name, email, password));
+  };
 
-  
+  if (user.loading) return <h1>Registering.....</h1>;
+  if (user.redirectToLoginPage) return <Redirect to="/login" />;
+
   return (
     <Container>
       <Form>
         <Form.Group controlId="formBasicEmail">
-          
+          <Form.Label> Name</Form.Label>
+          <Form.Control
+            onChange={(e) => setName(e.target.value)}
+            type="alue)email"
+            placeholder="Enter Name "
+          />
         </Form.Group>
         <Form.Label>Email address</Form.Label>
         <Form.Control
@@ -46,13 +48,12 @@ function AuthPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button onClick={onRegister}  variant="primary" type="submit">
+        <Button onClick={onRegister} variant="primary" type="submit">
           Submit
         </Button>
-        <Link to="/sign"> Sign Up</Link>
       </Form>{" "}
     </Container>
   );
 }
 
-export { AuthPage };
+export { RegisterPage };
